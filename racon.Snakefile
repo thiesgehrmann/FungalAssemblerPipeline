@@ -42,7 +42,7 @@ rule racon_end:
   """
 
 ###############################################################################
-
+  # For some reason, the -s option doesn't work in iterative racon runs
 rule racon_iter_align:
   input:
     asm = lambda wildcards: "%s/racon.%s.%s/asm.%d.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id, int(wildcards.iter)),

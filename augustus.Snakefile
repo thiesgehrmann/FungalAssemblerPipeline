@@ -29,18 +29,22 @@ rule augustus_gff2fasta:
   threads: 1
   shell: """
     cat { input.gff} \
-     | awk 'BEGIN{ BUF=""; IN=0} \
+     | grep "^# " \
+     | tr -d '#' \
+     | awk 'BEGIN{ BUF=""; IN=0}
            {if(index($0,"start") != 0){ 
-              BUF+=$0;
               IN=1;
-            } else if ( IN == 1){
-              if( index($0, "end") != 0) {
-              
             }
-  run:
-    G = Read(input.gff, format="gff")
-    S = Read(input.asm, format="fasta")
+            if ( IN == 1){
+              BUF=BUF $0
+              if( index($0, "end") != 0) {
+                print BUF
+                BUF=""
+              }
+            }}' \
+     | sed -e 's/[ ]*start gene \([^ ]\+\) protein sequence = \[\([A-Za-z ]\+\)\] end gene.*/>\1\n\2/' \
+     | tr -d ' ' \
+     | fold -w80 \
+     > {output.prot_fasta}
+  """
 
-rule augustus_wrapper:
-  input:
-    

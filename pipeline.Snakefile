@@ -75,12 +75,7 @@ PILON_OUTDIR = "%s/pilon" % WORKDIR
 
 rule all:
   input:
-    #single_meas = expand("%s/{exp}.fq" % MERGE_MEASUREMENTS_OUTDIR, rep=SINGLE_REP),
-    #paired_meas_r1 = expand("%s/{exp}_R1.fq" % MERGE_MEASUREMENTS_OUTDIR, rep=PAIRED_REP),
-    #paired_meas_r2 = expand("%s/{exp}_R2.fq" % MERGE_MEASUREMENTS_OUTDIR, rep=PAIRED_REP)
-    #minimap = expand("%s/minimap.{exp}.gz" % MINIMAP_OUTDIR, rep=SINGLE_REP)
-    #miniasm = expand("%s/miniasm.{exp}.gfa" % MINIASM_OUTDIR, rep=SINGLE_REP)
-    final = expand("%s/pilon.{assembler}.{sample_id}.fa"% PILON_OUTDIR, assembler=ASSEMBLERS, sample_id=config["sample_list"])
+    final = expand("%s/augustus.{assembler}.{sample_id}.fa"% AUGUSTUS_OUTDIR, assembler=ASSEMBLERS, sample_id=config["sample_list"])
   benchmark: "%s/all" % __LOGS_OUTDIR__
 
 ###############################################################################
@@ -135,7 +130,7 @@ include: "pilon.Snakefile"
 #  AUGUSTUS                                                                   #
 ###############################################################################
 
-#include: "augustus.Snakefile"
+include: "augustus.Snakefile"
 
 ###############################################################################
 #  BUSCO & METRICS                                                            #
