@@ -1,5 +1,13 @@
 ###############################################################################
 #  PILON                                                                      #
+#  For a description of the iterative setup, see racon.Snakefile, which       #
+#   is the same idea, but a slightly easier setup.                            #
+#                                                                             #
+#  In the case of pilon, we need to align the illumina reads to the corrected #
+#   assemblies in each iteration. This requires slightly different stragegies #
+#   for paired end single end reads. To solve this, we create two rules       #
+#   one for single end and one for paired end reads. Each produces a file     #
+#   with a prefix defining it as a specific type The 
 ###############################################################################
 
 rule pilon_begin:
@@ -126,17 +134,17 @@ rule pilon_iter_polish:
     iter       = lambda wildcards: int(wildcards.iter),
     max_iter   = __PILON_MAX_ITER__,
     pilon_maxmem = __PILON_MAXMEM__,
-    cmpFastaSeqs = cmpFastaSeqs,
+    shell_functions = __SHELL_FUNCTIONS__,
     ills_fmt = lambda wildcards: ' '.join(["--unpaired %s/pilon.%s.%s/aln.%s.%d.bam" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id, exp, int(wildcards.iter) - 1) for exp in sampleExpID_ILLS(wildcards.sample_id) ]),
     illp_fmt = lambda wildcards: ' '.join(["--frags    %s/pilon.%s.%s/aln.%s.%d.bam" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id, exp, int(wildcards.iter) - 1) for exp in sampleExpID_ILLP(wildcards.sample_id) ])
   benchmark: "%s/pilon_iter_polish.{assembler}.{sample_id}.{iter}" % __LOGS_OUTDIR__
   shell: """
-   {params.cmpFastaSeqs}
+   source {params.shell_functions}
     pilon "-Xmx{params.pilon_maxmem}"  --threads {threads} --outdir {params.tmp_outdir} --output pilon.{params.iter} --changes --vcf --tracks --genome {input.asm} {params.ills_fmt} {params.illp_fmt}
     cp {params.tmp_outdir}/pilon.{params.iter}.fasta {output.asm}
 
-   if [ {params.iter} -lt {params.max_iter} ] && [ `cmpFastaSeqs {output.asm} {params.tmp_outdir}/$(({params.iter}-1)).fa` == "0" ]; then
-     for i in `seq {params.iter} {params.max_iter}`; do
+   if [ {params.iter} -lt {params.max_iter} ] && [ `cmpFastaSeqs {output.asm} {params.tmp_outdir}/asm.$(({params.iter}-1)).fa` == "0" ]; then
+     for i in `seq $(({params.iter}+1)) {params.max_iter}`; do
        cp {params.tmp_outdir}/pilon.{params.iter}.fasta {params.tmp_outdir}/asm.$i.fa 
      done
    fi 

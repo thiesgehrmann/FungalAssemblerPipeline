@@ -35,6 +35,7 @@ escapeBraces = lambda s: s
 ###############################################################################
 #  SHELL FUNCTIONS                                                            #
 ###############################################################################
+__SHELL_FUNCTIONS__ = "%s/tools/shell_functions.sh" % INSTALL_DIR
 
 cmpFastaSeqs = escapeBraces("""
 function cmpFastaSeqs() {
