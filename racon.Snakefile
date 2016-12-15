@@ -1,3 +1,6 @@
+###############################################################################
+#  RACON                                                                      #
+###############################################################################
 
 rule racon_begin:
   input:
@@ -12,6 +15,8 @@ rule racon_begin:
     cp {input.asm} {output.asm}
   """
 
+###############################################################################
+
 rule racon_end:
   input:
     asm   = lambda wildcards: expand("%s/racon.%s.%s/{iter}.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id), iter=range(1, __RACON_MAX_ITER__ + 1))
@@ -24,6 +29,8 @@ rule racon_end:
     cp {params.final_asm} {output.asm}
   """
 
+###############################################################################
+
 rule racon_iter_align:
   input:
     asm = lambda wildcards: "%s/racon.%s.%s/%d.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id, int(wildcards.iter)),
@@ -35,6 +42,8 @@ rule racon_iter_align:
   shell: """
     minimap -Sw5 -L100 -m0 -t{threads} {input.asm} {input.fq} > {output.paf}
   """
+
+###############################################################################
 
 rule racon_iter_polish:
   input:

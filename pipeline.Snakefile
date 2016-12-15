@@ -80,7 +80,7 @@ rule all:
     #minimap = expand("%s/minimap.{exp}.gz" % MINIMAP_OUTDIR, rep=SINGLE_REP)
     #miniasm = expand("%s/miniasm.{exp}.gfa" % MINIASM_OUTDIR, rep=SINGLE_REP)
     final = expand("%s/pilon.{assembler}.{sample_id}.fa"% PILON_OUTDIR, assembler=ASSEMBLERS, sample_id=config["sample_list"])
-  benchmark: "%s/all.{assembler}.{sample_id}" % __LOGS_OUTDIR
+  benchmark: "%s/all" % __LOGS_OUTDIR__
 
 ###############################################################################
 #  MERGE ALL MEASUREMENTS INTO ONE                                            #
@@ -99,7 +99,7 @@ rule merge_sample_onts:
     ont = "%s/ont_single.{sample_id}.fq" % MERGE_SAMPLE_ONTS_OUTDIR
   params:
     rule_outdir = MERGE_SAMPLE_ONTS_OUTDIR
-  benchmark: "%s/merge_sample_onts.{assembler}.{sample_id}" % __LOGS_OUTDIR
+  benchmark: "%s/merge_sample_onts.{sample_id}" % __LOGS_OUTDIR__
   shell: """
     mkdir -p {params.rule_outdir}
     cat {input.onts} > {output.ont}
@@ -116,7 +116,7 @@ include: "asm_canu.Snakefile"
 #  ALIGNMENT TO REFERENCE                                                     #
 ###############################################################################
 
-include: "ref_align.Snakefile"
+#include: "ref_align.Snakefile"
 
 ###############################################################################
 #  RACON                                                                      #
@@ -131,12 +131,6 @@ include: "racon.Snakefile"
 include: "pilon.Snakefile"
 
 ###############################################################################
-#  NANOPOLISH                                                                 #
-###############################################################################
-
-#include: "nanopolish.Snakefile"
-
-###############################################################################
 #  AUGUSTUS                                                                   #
 ###############################################################################
 
@@ -147,3 +141,4 @@ include: "pilon.Snakefile"
 ###############################################################################
 
 #include: "busco.Snakefile"
+#include: "metrics.Snakefile"

@@ -4,7 +4,7 @@
 
 rule pilon_begin:
   input:
-    asm = lambda wildcards: "%s/asm.%s.%s.fa" % (ASM_OUTDIR, wildcards.assembler, wildcards.sample_id)
+    asm = lambda wildcards: "%s/racon.%s.%s.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id)
   output:
     asm = "%s/pilon.{assembler}.{sample_id}/asm.0.fa" % PILON_OUTDIR
   params:
@@ -39,7 +39,6 @@ rule pilon_iter_bwa_build:
     idx_flag = "%s/pilon.{assembler}.{sample_id}/idx.{iter,[0-9]}.flag" % (PILON_OUTDIR)
   params:
     idx_base = lambda wildcards: "%s/pilon.%s.%s/idx.%d" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id, int(wildcards.iter)),
-    rule_outdir = BWA_INDEX_OUTDIR
   threads: 4
   benchmark: "%s/pilon_iter_bwa_build.{assembler}.{sample_id}.{iter}" % __LOGS_OUTDIR__
   shell: """
@@ -137,8 +136,8 @@ rule pilon_iter_polish:
     cp {params.tmp_outdir}/pilon.{params.iter}.fasta {output.asm}
 
    if [ {params.iter} -lt {params.max_iter} ] && [ `cmpFastaSeqs {output.asm} {params.tmp_outdir}/$(({params.iter}-1)).fa` == "0" ]; then
-     for i in `seq {params.iter}; do
-       cp {output.asm} {params.tmp_outdir}/asm.$i.fa 
+     for i in `seq {params.iter} {params.max_iter}`; do
+       cp {params.tmp_outdir}/pilon.{params.iter}.fasta {params.tmp_outdir}/asm.$i.fa 
      done
    fi 
   """
