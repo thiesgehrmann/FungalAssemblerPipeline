@@ -11,9 +11,9 @@ rule canu:
     asm = "%s/{sample_id}/{sample_id}.unitigs.fasta" % (__CANU_OUTDIR__),
     gfa = "%s/{sample_id}/{sample_id}.unitigs.gfa" % (__CANU_OUTDIR__)
   params:
-    genome_size = __CANUGENOMESIZE__,
+    genome_size = CANU_GENOMESIZE,
     output_dir  = lambda wildcards: "%s/%s" % (__CANU_OUTDIR__, wildcards.sample_id),
-    maxmem      = __CANUMAXMEM__
+    maxmem      = CANU_MAXMEM
   threads: 4
   shell: """
     mkdir -p {params.output_dir}

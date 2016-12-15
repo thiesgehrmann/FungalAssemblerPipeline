@@ -31,7 +31,7 @@ rule pilon_end:
   output:
     asm = "%s/pilon.{assembler}.{sample_id}.fa" % (PILON_OUTDIR)
   params:
-    final_asm = lambda wildcards: "%s/pilon.%s.%s/asm.%d.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id, __RACON_MAX_ITER__)
+    final_asm = lambda wildcards: "%s/pilon.%s.%s/asm.%d.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id, RACON_MAXITER)
   benchmark: "%s/pilon_end.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
     cp {params.final_asm} {output.asm}

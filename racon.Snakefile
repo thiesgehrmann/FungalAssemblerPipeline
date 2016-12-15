@@ -31,11 +31,11 @@ rule racon_begin:
 
 rule racon_end:
   input:
-    asm   = lambda wildcards: expand("%s/racon.%s.%s/asm.{iter}.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id), iter=range(1, __RACON_MAX_ITER__ + 1))
+    asm   = lambda wildcards: expand("%s/racon.%s.%s/asm.{iter}.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id), iter=range(1, RACON_MAXITER + 1))
   output:
     asm = "%s/racon.{assembler}.{sample_id}.fa" % (RACON_OUTDIR)
   params:
-    final_asm = lambda wildcards: "%s/racon.%s.%s/asm.%d.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id, __RACON_MAX_ITER__)
+    final_asm = lambda wildcards: "%s/racon.%s.%s/asm.%d.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id, RACON_MAXITER)
   benchmark: "%s/racon_end.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
     cp {params.final_asm} {output.asm}
@@ -69,7 +69,7 @@ rule racon_iter_polish:
     tmp_outdir = lambda wildcards: "%s/racon.%s.%s" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id),
     iter       = lambda wildcards: wildcards.iter,
     prev_iter  = lambda wildcards: str(int(wildcards.iter)-1),
-    max_iter   = __RACON_MAX_ITER__,
+    max_iter   = RACON_MAXITER,
     shell_functions = __SHELL_FUNCTIONS__
   benchmark: "%s/racon_iter_polish.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
