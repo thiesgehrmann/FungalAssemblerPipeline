@@ -27,7 +27,7 @@ rule pilon_begin:
 
 rule pilon_end:
   input:
-    asm = lambda wildcards: expand("%s/pilon.%s.%s/asm.{iter}.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id), iter=range(1, __PILON_MAX_ITER__ + 1))
+    asm = lambda wildcards: expand("%s/pilon.%s.%s/asm.{iter}.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id), iter=range(1, PILON_MAXITER + 1))
   output:
     asm = "%s/pilon.{assembler}.{sample_id}.fa" % (PILON_OUTDIR)
   params:
@@ -132,8 +132,8 @@ rule pilon_iter_polish:
     sample_id = lambda wildcards: wildcards.sample_id,
     tmp_outdir = lambda wildcards: "%s/pilon.%s.%s" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id),
     iter       = lambda wildcards: int(wildcards.iter),
-    max_iter   = __PILON_MAX_ITER__,
-    pilon_maxmem = __PILON_MAXMEM__,
+    max_iter   = PILON_MAXITER,
+    pilon_maxmem = PILON_MAXMEM,
     shell_functions = __SHELL_FUNCTIONS__,
     ills_fmt = lambda wildcards: ' '.join(["--unpaired %s/pilon.%s.%s/aln.%s.%d.bam" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id, exp, int(wildcards.iter) - 1) for exp in sampleExpID_ILLS(wildcards.sample_id) ]),
     illp_fmt = lambda wildcards: ' '.join(["--frags    %s/pilon.%s.%s/aln.%s.%d.bam" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id, exp, int(wildcards.iter) - 1) for exp in sampleExpID_ILLP(wildcards.sample_id) ])

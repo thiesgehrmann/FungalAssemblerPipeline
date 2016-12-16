@@ -73,15 +73,12 @@ rule racon_iter_polish:
     shell_functions = __SHELL_FUNCTIONS__
   benchmark: "%s/racon_iter_polish.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
-   echo "RUNNING RACON"
    source {params.shell_functions}
    racon  -t {threads} {input.fq} {input.paf} {input.asm} {output.asm}
    wc -l {output.asm}
 
    if [ {params.iter} -lt {params.max_iter} ] && [ `cmpFastaSeqs {output.asm} {params.tmp_outdir}/asm.{params.prev_iter}.fa` == "0" ]; then
-     echo "NO CHANGE"
      for i in `seq $(({params.iter}+1)) {params.max_iter}`; do
-       echo "COPYING to iter $i"
        ln -s {output.asm} {params.tmp_outdir}/asm.$i.fa 
      done
    fi 

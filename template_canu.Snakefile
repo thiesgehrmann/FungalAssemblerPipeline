@@ -8,12 +8,13 @@ rule canu:
   input:
     fq = lambda wildcards: "%s/ont_single.%s.fq" % (MERGE_SAMPLE_ONTS_OUTDIR, wildcards.sample_id)
   output:
-    asm = "%s/{sample_id}/{sample_id}.unitigs.fasta" % (__CANU_OUTDIR__),
-    gfa = "%s/{sample_id}/{sample_id}.unitigs.gfa" % (__CANU_OUTDIR__)
+    asm  = "%s/{assembler}/{sample_id}/{sample_id}.unitigs.fasta" % (__CANU_OUTDIR__),
+    gfa  = "%s/{assembler}/{sample_id}/{sample_id}.unitigs.gfa" % (__CANU_OUTDIR__),
+    copy = "%s/{assembler}/canu.{sample_id}.fa" % (__CANU_OUTDIR__)
   params:
-    genome_size = CANU_GENOMESIZE,
-    output_dir  = lambda wildcards: "%s/%s" % (__CANU_OUTDIR__, wildcards.sample_id),
-    maxmem      = CANU_MAXMEM
+    genome_size = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["genomesize"],
+    maxmem      = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["maxmem"],
+    output_dir  = lambda wildcards: "%s/%s/%s" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id)
   threads: 4
   shell: """
     mkdir -p {params.output_dir}
@@ -23,6 +24,7 @@ rule canu:
          maxThreads={threads} \
          genomeSize={params.genome_size} \
          -nanopore-raw {input.fq}
+    cp {output.asm} {output.copy}
   """
 ###############################################################################
 #  WRAPPER                                                                    #
@@ -30,9 +32,9 @@ rule canu:
 
 rule canu_wrapper:
   input:
-    asm = lambda wildcards: "%s/%s/%s.unitigs.fasta" % (__CANU_OUTDIR__, wildcards.sample_id, wildcards.sample_id)
+    asm = lambda wildcards: "%s/%s/%s.%s.fa" % (__CANU_OUTDIR__, wildcards.assembler, tconfig["assemblers"][wildcards.assembler]["template"], wildcards.sample_id)
   output:
-    asm = "%s/asm.canu.{sample_id}.fa" % ASM_OUTDIR
+    asm = "%s/asm.{assembler}.{sample_id}.fa" % ASM_OUTDIR
   shell: """
     cp {input.asm} {output.asm}
   """

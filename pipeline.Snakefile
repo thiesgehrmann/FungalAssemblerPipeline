@@ -4,6 +4,10 @@ import re
 #  INTERNAL VARIABLES                                                         #
 ###############################################################################
 
+__ASSEMBLERS__ = tconfig["assemblers"].keys()
+
+__TOOLS_DIR__   = "%s/tools" % INSTALL_DIR
+
 __NOCASE__ = "/UNDEFINED/CASE/../NO/CURRENT/IMPLEMENTATION"
 
 wildcard_constraints:
@@ -29,29 +33,12 @@ sampleDataTypes  = lambda sample_id: uniq([ "%s,%s" % (r["data_type"], r["librar
 
 expSampleID = lambda exp_id: [ r["sample_id"] for r in config["data"] if r["experiment_id"] == exp_id][0]
 
-#escapeBraces = lambda s: re.sub(r'({[^{}]+})', r'\{\1\}', s)
-escapeBraces = lambda s: s
-
 ###############################################################################
 #  SHELL FUNCTIONS                                                            #
 ###############################################################################
-__SHELL_FUNCTIONS__ = "%s/tools/shell_functions.sh" % INSTALL_DIR
 
-cmpFastaSeqs = escapeBraces("""
-function cmpFastaSeqs() {
-  local f1="$1"
-  local f2="$2";
+__SHELL_FUNCTIONS__ = "%s/tools/shell_functions.sh" % __TOOLS_DIR__
 
-  h1=`cat "$f1" | tr '\\n' '|' | sort | cut -d\| -f2 | tr '[:upper:]' '[:lower:]' | md5sum | head -c 32`
-  h2=`cat "$f2" | tr '\\n' '|' | sort | cut -d\| -f2 | tr '[:upper:]' '[:lower:]' | md5sum | head -c 32`
-
-  if [ "$h1" != "$h2" ]; then
-    echo "1"
-  else
-    echo "0"
-  fi
-}
-""")
 ###############################################################################
 #  RULE OUTPUT DIRECTORIES                                                    #
 ###############################################################################
@@ -70,6 +57,9 @@ RACON_OUTDIR = "%s/racon" % WORKDIR
 
 PILON_OUTDIR = "%s/pilon" % WORKDIR
 
+AUGUSTUS_OUTDIR = "%s/augustus"% WORKDIR
+
+BUSCO_OUTDIR = "%s/busco" % WORKDIR
 
 ###############################################################################
 #  RULE ALL                                                                   #
@@ -77,7 +67,7 @@ PILON_OUTDIR = "%s/pilon" % WORKDIR
 
 rule all:
   input:
-    final = expand("%s/augustus.{assembler}.{sample_id}.fa"% AUGUSTUS_OUTDIR, assembler=ASSEMBLERS, sample_id=config["sample_list"])
+    final = expand("%s/busco.{assembler}.{sample_id}.summary"% BUSCO_OUTDIR, assembler=__ASSEMBLERS__, sample_id=config["sample_list"])
   benchmark: "%s/all" % __LOGS_OUTDIR__
 
 ###############################################################################
@@ -95,7 +85,7 @@ include: "merge_sample_onts.Snakefile"
 #  ASSEMBLERS                                                                 #
 ###############################################################################
 
-include: "asm_miniasm.Snakefile"
+include: "template_miniasm.Snakefile"
 include: "asm_canu.Snakefile"
 
 ###############################################################################
@@ -126,5 +116,5 @@ include: "augustus.Snakefile"
 #  BUSCO & METRICS                                                            #
 ###############################################################################
 
-#include: "busco.Snakefile"
+include: "busco.Snakefile"
 #include: "metrics.Snakefile"
