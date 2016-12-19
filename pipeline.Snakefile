@@ -86,7 +86,7 @@ include: "merge_sample_onts.Snakefile"
 ###############################################################################
 
 include: "template_miniasm.Snakefile"
-include: "asm_canu.Snakefile"
+include: "template_canu.Snakefile"
 
 ###############################################################################
 #  ALIGNMENT TO REFERENCE                                                     #

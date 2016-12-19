@@ -2,6 +2,9 @@
 #  CANU                                                                       #
 ###############################################################################
 
+# Will be a good idea to consider these things:
+#  http://canu.readthedocs.io/en/latest/faq.html
+
 __CANU_OUTDIR__ = "%s/canu/" % WORKDIR
 
 rule canu:
@@ -14,15 +17,18 @@ rule canu:
   params:
     genome_size = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["genomesize"],
     maxmem      = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["maxmem"],
+    params      = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["params"],
     output_dir  = lambda wildcards: "%s/%s/%s" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id)
   threads: 4
+  benchmark: "%s/asm.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
     mkdir -p {params.output_dir}
-    canu -p {sample_id} \
+    canu -p {wildcards.sample_id} \
          -d {params.output_dir} \
          maxMemory={params.maxmem} \
          maxThreads={threads} \
          genomeSize={params.genome_size} \
+         {params.params} \
          -nanopore-raw {input.fq}
     cp {output.asm} {output.copy}
   """

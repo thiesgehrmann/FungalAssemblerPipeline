@@ -9,8 +9,8 @@ rule augustus_gff:
     gff = "%s/augustus_gff.{assembler}.{sample_id}.gff" % AUGUSTUS_OUTDIR
   threads: 4
   params:
-    augustus_species = AUGUSTUS_SPECIES,
-    augustus_params  = AUGUSTUS_PARAMS,
+    augustus_species = tconfig["augustus"]["species"],
+    augustus_params  = tconfig["augustus"]["params"],
     rule_outdir = AUGUSTUS_OUTDIR
   benchmark: "%s/augustus_gff.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
@@ -31,8 +31,10 @@ rule augustus_gff_sample:
     gff = lambda wildcards: "%s/augustus_gff.%s.%s.gff" % (AUGUSTUS_OUTDIR, wildcards.assembler, wildcards.sample_id)
   output:
     gff = "%s/augustus.{assembler}.{sample_id}.gff" % AUGUSTUS_OUTDIR
+  params:
+    geneid_prefix = tconfig["augustus"]["geneid_prefix"]
   shell: """
-    sed -e "s/\([= ]\)\(g[0-9]\+\)/\\1{wildcards.sample_id}|\\2/g" {input.gff} > {output.gff}
+    sed -e "s/\([= ]\)\(g[0-9]\+\)/\\1{params.geneid_prefix}|\\2/g" {input.gff} > {output.gff}
   """
 
 ###############################################################################
@@ -48,7 +50,7 @@ rule augustus_gff2fasta:
     cat {input.gff} \
      | grep "^# " \
      | tr -d '#' \
-     | grep -v -e "[pP]redict" -e "----" \
+     | grep -v -e "[pP]redict" -e "----" -e "(none)" \
      | awk 'BEGIN{{ BUF=""; IN=0}}
            {{if(index($0,"start") != 0){{ 
               IN=1;

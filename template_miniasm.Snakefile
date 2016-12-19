@@ -13,8 +13,9 @@ rule minimap:
   params:
     minimap_params = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["minimap_params"],
     rule_outdir = lambda wildcards: "%s/%s" % (__MINIASM_OUTDIR__, wildcards.assembler)
+  benchmark: "%s/minimap.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
-    mkdir -p {params.rule_outdir)
+    mkdir -p {params.rule_outdir}
     minimap {params.minimap_params} -t{threads} {input.fq} {input.fq} | gzip -1 > {output.aln}
   """
 
@@ -31,6 +32,7 @@ rule miniasm:
     asm = "%s/{assembler}/miniasm.{sample_id}.fa" % __MINIASM_OUTDIR__
   params:
     miniasm_params = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["miniasm_params"]
+  benchmark: "%s/asm.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
     miniasm {params.miniasm_params} -f {input.fq} {input.aln} > {output.gfa}
     cat {output.gfa} | grep -e "^S" | cut -f3 | awk 'BEGIN{{N=1}}{{print ">contig" N "\\n" $0; N=N+1}}' > {output.asm}
