@@ -4,7 +4,7 @@ import re
 #  INTERNAL VARIABLES                                                         #
 ###############################################################################
 
-__ASSEMBLERS__ = tconfig["assemblers"].keys()
+__ASSEMBLERS__ = tconfig["assemblers"]
 
 __TOOLS_DIR__   = "%s/tools" % INSTALL_DIR
 
@@ -37,7 +37,7 @@ expSampleID = lambda exp_id: [ r["sample_id"] for r in config["data"] if r["expe
 #  SHELL FUNCTIONS                                                            #
 ###############################################################################
 
-__SHELL_FUNCTIONS__ = "%s/tools/shell_functions.sh" % __TOOLS_DIR__
+__SHELL_FUNCTIONS__ = "%s/shell_functions.sh" % __TOOLS_DIR__
 
 ###############################################################################
 #  RULE OUTPUT DIRECTORIES                                                    #
@@ -61,13 +61,17 @@ AUGUSTUS_OUTDIR = "%s/augustus"% WORKDIR
 
 BUSCO_OUTDIR = "%s/busco" % WORKDIR
 
+QUAST_OUTDIR = "%s/quast" % WORKDIR
+
+METRICS_OUTDIR = "%s/metrics" % WORKDIR
+
 ###############################################################################
 #  RULE ALL                                                                   #
 ###############################################################################
 
 rule all:
   input:
-    final = expand("%s/busco.{assembler}.{sample_id}.summary"% BUSCO_OUTDIR, assembler=__ASSEMBLERS__, sample_id=config["sample_list"])
+    metric = "%s/metrics.tsv" % METRICS_OUTDIR
   benchmark: "%s/all" % __LOGS_OUTDIR__
 
 ###############################################################################
@@ -87,12 +91,7 @@ include: "merge_sample_onts.Snakefile"
 
 include: "template_miniasm.Snakefile"
 include: "template_canu.Snakefile"
-
-###############################################################################
-#  ALIGNMENT TO REFERENCE                                                     #
-###############################################################################
-
-#include: "ref_align.Snakefile"
+include: "template_spades.Snakefile"
 
 ###############################################################################
 #  RACON                                                                      #
@@ -113,8 +112,9 @@ include: "pilon.Snakefile"
 include: "augustus.Snakefile"
 
 ###############################################################################
-#  BUSCO & METRICS                                                            #
+#  METRICS                                                                    #
 ###############################################################################
 
 include: "busco.Snakefile"
-#include: "metrics.Snakefile"
+include: "quast.Snakefile"
+include: "metrics.Snakefile"

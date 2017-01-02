@@ -4,15 +4,14 @@
 
 rule busco_dataset:
   output:
-    tgz  = "%s/dataset.tar.gz" % BUSCO_OUTDIR,
-    dir  = "%s/dataset" % BUSCO_OUTDIR
+    tgz  = "%s/dataset.{assembler}.tar.gz" % BUSCO_OUTDIR,
+    dir  = "%s/dataset.{assembler}" % BUSCO_OUTDIR
   params:
-    rule_outdir = BUSCO_OUTDIR,
-    db = tconfig["busco"]["database"]
+    db = lambda wildcards: tconfig[wildcards.assembler]["busco_database"]
   shell: """
     wget {params.db} -O {output.tgz}
-    tar -xf {output.tgz} -C {params.rule_outdir}
-    mv "{params.rule_outdir}/`tar -ztf {output.tgz} | head -n1`" {output.dir}
+    mkdir -p {output.dir}
+    tar -xf {output.tgz} --strip-components=1 -C {output.dir}
   """
 
 ###############################################################################
@@ -20,7 +19,7 @@ rule busco_dataset:
 rule busco:
   input:
     proteins = lambda wildcards: "%s/augustus.%s.%s.fa" % (AUGUSTUS_OUTDIR, wildcards.assembler, wildcards.sample_id),
-    db  = "%s/dataset" % BUSCO_OUTDIR
+    db       = lambda wildcards: "%s/dataset.%s" % (BUSCO_OUTDIR, wildcards.assembler)
   output:
     summary = "%s/busco.{assembler}.{sample_id}.summary" % BUSCO_OUTDIR
   threads: 4

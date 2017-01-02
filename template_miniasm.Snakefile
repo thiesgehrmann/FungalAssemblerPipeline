@@ -11,7 +11,7 @@ rule minimap:
     aln = "%s/{assembler}/minimap.{sample_id}.gz" % __MINIASM_OUTDIR__
   threads: 4
   params:
-    minimap_params = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["minimap_params"],
+    minimap_params = lambda wildcards: tconfig[wildcards.assembler]["minimap_params"],
     rule_outdir = lambda wildcards: "%s/%s" % (__MINIASM_OUTDIR__, wildcards.assembler)
   benchmark: "%s/minimap.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
@@ -31,7 +31,7 @@ rule miniasm:
     gfa = "%s/{assembler}/miniasm.{sample_id}.gfa" % __MINIASM_OUTDIR__,
     asm = "%s/{assembler}/miniasm.{sample_id}.fa" % __MINIASM_OUTDIR__
   params:
-    miniasm_params = lambda wildcards: tconfig["assemblers"][wildcards.assembler]["miniasm_params"]
+    miniasm_params = lambda wildcards: tconfig[wildcards.assembler]["miniasm_params"]
   benchmark: "%s/asm.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
     miniasm {params.miniasm_params} -f {input.fq} {input.aln} > {output.gfa}
@@ -44,7 +44,7 @@ rule miniasm:
 
 rule miniasm_wrapper:
   input:
-    asm = lambda wildcards: "%s/%s/%s.%s.fa" % (__MINIASM_OUTDIR__, wildcards.assembler, tconfig["assemblers"][wildcards.assembler]["template"], wildcards.sample_id)
+    asm = lambda wildcards: "%s/%s/%s.%s.fa" % (__MINIASM_OUTDIR__, wildcards.assembler, tconfig[wildcards.assembler]["template"], wildcards.sample_id)
   output:
     asm = "%s/asm.{assembler}.{sample_id}.fa" % ASM_OUTDIR
   threads: 1

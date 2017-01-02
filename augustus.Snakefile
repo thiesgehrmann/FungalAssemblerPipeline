@@ -9,8 +9,8 @@ rule augustus_gff:
     gff = "%s/augustus_gff.{assembler}.{sample_id}.gff" % AUGUSTUS_OUTDIR
   threads: 4
   params:
-    augustus_species = tconfig["augustus"]["species"],
-    augustus_params  = tconfig["augustus"]["params"],
+    augustus_species = lambda wildcards: tconfig[wildcards.assembler]["augustus_species"],
+    augustus_params  = lambda wildcards: tconfig[wildcards.assembler]["augustus_params"],
     rule_outdir = AUGUSTUS_OUTDIR
   benchmark: "%s/augustus_gff.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
@@ -32,7 +32,7 @@ rule augustus_gff_sample:
   output:
     gff = "%s/augustus.{assembler}.{sample_id}.gff" % AUGUSTUS_OUTDIR
   params:
-    geneid_prefix = tconfig["augustus"]["geneid_prefix"]
+    geneid_prefix = lambda wildcards: tconfig[wildcards.assembler]["augustus_geneid_prefix"](wildcards)
   shell: """
     sed -e "s/\([= ]\)\(g[0-9]\+\)/\\1{params.geneid_prefix}|\\2/g" {input.gff} > {output.gff}
   """
