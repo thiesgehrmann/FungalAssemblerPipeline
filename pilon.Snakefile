@@ -11,7 +11,6 @@
 ###############################################################################
 
 
-
   # If we decide to skip racon
 rule skip_pilon:
   input:
@@ -22,6 +21,7 @@ rule skip_pilon:
     cp {input.asm} {output.asm}
   """
 
+###############################################################################
 
 rule pilon_begin:
   input:
