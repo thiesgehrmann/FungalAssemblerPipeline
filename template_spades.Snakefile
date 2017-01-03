@@ -12,6 +12,7 @@ rule spades:
     r2      = lambda wildcards: expand("%s/illumina_paired.{exp}_2.fq" % (MERGE_MEASUREMENTS_OUTDIR), exp=sampleExpID_ILLP(wildcards.sample_id))
   output:
     asm = "%s/{assembler}/spades.{sample_id}.fa" % __SPADES_OUTDIR__
+  threads: 16
   params:
     spades_params = lambda wildcards: tconfig[wildcards.assembler]["spades_params"],
     out_dir = lambda wildcards: "%s/%s/%s" % (__SPADES_OUTDIR__, wildcards.assembler, wildcards.sample_id),

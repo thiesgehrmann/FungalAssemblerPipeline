@@ -1,7 +1,11 @@
+###############################################################################
+# COMBINE METRICS                                                             #
+###############################################################################
+
 rule asm_sample_metrics:
   input:
-    busco = lambda wildcards: "%s/busco.%s.%s.summary" % (BUSCO_OUTDIR, wildcards.assembler, wildcards.sample_id), 
-    quast = lambda wildcards: "%s/quast.%s.%s.tsv"     % (QUAST_OUTDIR, wildcards.assembler, wildcards.sample_id)
+    busco = lambda wildcards: "%s/busco.%s.%s.summary" % (BUSCO_OUTDIR, wildcards.assembler, wildcards.sample_id) if tconfig[wildcards.assembler]["busco_do"] else "/dev/null", 
+    quast = lambda wildcards: "%s/quast.%s.%s.tsv"     % (QUAST_OUTDIR, wildcards.assembler, wildcards.sample_id) if tconfig[wildcards.assembler]["quast_do"] else "/dev/null"
   output:
     metric = "%s/metrics.{assembler}.{sample_id}.tsv" % METRICS_OUTDIR
   params:

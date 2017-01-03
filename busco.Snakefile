@@ -16,9 +16,20 @@ rule busco_dataset:
 
 ###############################################################################
 
+rule busco_skip:
+  input:
+    asm = lambda wildcards: __NO_CASE__ if tconfig[wildcards.assembler]["busco_do"] else "%s/pilon.%s.%s.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id)
+  output:
+    summary = "%s/busco.{assembler}.{sample_id}.summary" % BUSCO_OUTDIR
+  shell: """
+    touch {output.summary}
+  """
+
+###############################################################################
+
 rule busco:
   input:
-    proteins = lambda wildcards: "%s/augustus.%s.%s.fa" % (AUGUSTUS_OUTDIR, wildcards.assembler, wildcards.sample_id),
+    proteins = lambda wildcards: "%s/augustus.%s.%s.fa" % (AUGUSTUS_OUTDIR, wildcards.assembler, wildcards.sample_id) if tconfig[wildcards.assembler]["busco_do"] else __NO_CASE__,
     db       = lambda wildcards: "%s/dataset.%s" % (BUSCO_OUTDIR, wildcards.assembler)
   output:
     summary = "%s/busco.{assembler}.{sample_id}.summary" % BUSCO_OUTDIR
