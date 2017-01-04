@@ -1,6 +1,8 @@
 # FungalAssemblerPipeline
 A pipeline dedicated to the assembly of fungal genomes with ONT reads, and polishing with ONT and illumina reads.
 
+![A graphical representation of the pipeline](/rulegraph.png)
+
 ## Dependencies
 
   * Assemblers (At least one):
