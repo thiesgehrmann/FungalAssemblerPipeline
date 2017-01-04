@@ -35,7 +35,7 @@ rule quast:
 
 rule quast_sample_reports:
   input:
-   reports = expand("%s/quast_sample.{sample_id}.html", sample_id=config["sample_list"])
+   reports = expand("%s/quast_sample.{sample_id}.html" % QUAST_OUTDIR, sample_id=config["sample_list"])
 
 ###############################################################################
 
@@ -52,9 +52,9 @@ rule quast_sample:
     euk = "--eukaryote" if tconfig[__ASSEMBLERS__[0]]["quast_eukaryote"] else "",
     sca = "--scaffolds" if tconfig[__ASSEMBLERS__[0]]["quast_scaffolds"] else "",
     out_dir = lambda wildcards: "%s/quast_sample.%s.%s/" % (QUAST_OUTDIR, __ASSEMBLERS__[0], wildcards.sample_id),
-    label   = ','.join(__ASSEMBLERS__)
+    label   = "-l " + ','.join(__ASSEMBLERS__)
   shell: """
     mkdir -p {params.out_dir}
-    quast -o {params.out_dir} -t {threads} {params.ref} {params.gff} {params.ers} {params.euk} {params.sca} {params.label} {input.asm}
-    cp {params.out_dir}/report.tsv {output.rep}
+    quast -o {params.out_dir} -t {threads} {params.ref} {params.gff} {params.ers} {params.euk} {params.sca} {params.label} {input.asms}
+    cp {params.out_dir}/report.html {output.rep}
   """

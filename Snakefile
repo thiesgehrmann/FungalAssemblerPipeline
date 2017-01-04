@@ -116,6 +116,9 @@ addParams("canu_nopolish",
    "pilon_do"        : False})
 
 addParams("spades_full", {"template" : "spades"})
+addParams("spades_noracon", {"template" : "spades", "racon_do": False})
+addParams("spades_nopilon", {"template" : "spades", "pilon_do": False})
+addParams("spades_nopolish", {"template" : "spades", "racon_do" : False, "pilon_do": False})
 
 ###############################################################################
 ###############################################################################

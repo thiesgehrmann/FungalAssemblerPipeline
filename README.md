@@ -1,5 +1,5 @@
 # FungalAssemblerPipeline
-A pipeline dedicated to the assembly of fungal genomes with ONT reads, and polishing with .
+A pipeline dedicated to the assembly of fungal genomes with ONT reads, and polishing with ONT and illumina reads.
 
 ## Dependencies
 
@@ -9,11 +9,13 @@ A pipeline dedicated to the assembly of fungal genomes with ONT reads, and polis
     * Spades
   * Polishing (At least one):
     * Racon
+      * Minimap
     * Pilon
   * Metrics (At least one):
     * BUSCO
       * Augustus
     * QUAST
   * Core tools
+    * bwa
     * Samtools
     * Pandas
