@@ -20,7 +20,7 @@ rule skip_racon:
   output:
     asm = "%s/racon.{assembler}.{sample_id}.fa" % (RACON_OUTDIR)
   shell: """
-    cp {input.asm} {output.asm}
+    ln -s {input.asm} {output.asm}
   """
 
 ###############################################################################
@@ -35,7 +35,7 @@ rule racon_begin:
   benchmark: "%s/racon_begin.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
     mkdir -p {params.tmp_outdir}
-    cp {input.asm} {output.asm}
+    ln -s {input.asm} {output.asm}
   """
 
 ###############################################################################
@@ -49,7 +49,7 @@ rule racon_end:
     final_asm = lambda wildcards: "%s/racon.%s.%s/asm.%d.fa" % (RACON_OUTDIR, wildcards.assembler, wildcards.sample_id, tconfig[wildcards.assembler]["racon_maxiter"])
   benchmark: "%s/racon_end.{assembler}.{sample_id}" % __LOGS_OUTDIR__
   shell: """
-    cp {params.final_asm} {output.asm}
+    ln -s {params.final_asm} {output.asm}
   """
 
 ###############################################################################

@@ -1,6 +1,9 @@
 # FungalAssemblerPipeline
 A pipeline dedicated to the assembly of fungal genomes with ONT reads, and polishing with ONT and illumina reads.
 
+Currently, the Miniasm, Canu and Spades assemblers are implemented in the pipeline.
+Polishing steps can be skipped at will.
+
 ![A graphical representation of the pipeline](/rulegraph.png)
 
 ## Dependencies

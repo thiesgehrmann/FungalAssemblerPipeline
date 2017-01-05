@@ -49,8 +49,8 @@ rule quast_sample:
     ref = "" if tconfig[__ASSEMBLERS__[0]]["quast_ref"] is None else "-R %s" % tconfig[__ASSEMBLERS__[0]]["quast_ref"],
     gff = "" if tconfig[__ASSEMBLERS__[0]]["quast_gff"] is None else "-G %s" % tconfig[__ASSEMBLERS__[0]]["quast_gff"],
     ers = "--est-ref-size %d" % tconfig[__ASSEMBLERS__[0]]["quast_est_ref_size"] if ((tconfig[__ASSEMBLERS__[0]]["quast_est_ref_size"] is not None) and (tconfig[__ASSEMBLERS__[0]]["quast_ref"] is None)) else "",
-    euk = "--eukaryote" if tconfig[__ASSEMBLERS__[0]]["quast_eukaryote"] else "",
-    sca = "--scaffolds" if tconfig[__ASSEMBLERS__[0]]["quast_scaffolds"] else "",
+    euk = "--eukaryote" if any([tconfig[a]["quast_eukaryote"] for a in __ASSEMBLERS__]) else "",
+    sca = "--scaffolds" if any([tconfig[a]["quast_scaffolds"] for a in __ASSEMBLERS__]) else "",
     out_dir = lambda wildcards: "%s/quast_sample.%s.%s/" % (QUAST_OUTDIR, __ASSEMBLERS__[0], wildcards.sample_id),
     label   = "-l " + ','.join(__ASSEMBLERS__)
   shell: """
