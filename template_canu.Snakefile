@@ -56,6 +56,7 @@ rule canu_correct_iter:
   threads: 4
   params:
     params      = lambda wildcards: tconfig[wildcards.assembler]["canu_params"],
+    genome_size = lambda wildcards: tconfig[wildcards.assembler]["canu_genomesize"],
     corr_params = lambda wildcards: tconfig[wildcards.assembler]["canu_correct_params"],
     maxmem      = lambda wildcards: tconfig[wildcards.assembler]["canu_maxmem"],
     output_dir  = lambda wildcards: "%s/%s/correction/correct.%s.%s/" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id, wildcards.iter)
@@ -83,19 +84,21 @@ rule canu_trim:
   threads: 4
   params:
     params      = lambda wildcards: tconfig[wildcards.assembler]["canu_params"],
+    genome_size = lambda wildcards: tconfig[wildcards.assembler]["canu_genomesize"],
     corr_params = lambda wildcards: tconfig[wildcards.assembler]["canu_trim_params"],
     maxmem      = lambda wildcards: tconfig[wildcards.assembler]["canu_maxmem"],
     output_dir  = lambda wildcards: "%s/%s/trimmed/trim.%s/" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id)
   shell: """
     mkdir -p {params.output_dir}
     canu -trim \
-      {params.params} \
-      {params.corr_params} \
       -p {wildcards.sample_id}
       -d {params.output_dir} \
-       maxMemory={params.maxmem} \
-       maxThreads={threads} \
-       -nanopore-raw {input.fa}
+      genomeSize={params.genome_size} \
+      {params.params} \
+      {params.corr_params} \
+      maxMemory={params.maxmem} \
+      maxThreads={threads} \
+      -nanopore-raw {input.fa}
     ln -s {params.output_dir}/{wildcards.sample_id}.trimmedReads.fasta.gz {output.fa}
   """
     
