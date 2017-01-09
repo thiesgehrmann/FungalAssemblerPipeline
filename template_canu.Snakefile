@@ -9,11 +9,12 @@ __CANU_OUTDIR__ = "%s/canu/" % WORKDIR
 
 rule canu_correct_end:
   input: 
-    fq = lambda wildcards: expand("%s/%s/correction/correct.%s.{iter}.fasta.gz" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id), iter=range(1, int(tconfig[wildcards.assembler]["canu_correct_iter"])+1))
+    fq   = lambda wildcards: expand("%s/%s/correction/correct.%s.{iter}.fasta.gz" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id), iter=range(1, tconfig[wildcards.assembler]["canu_correct_iter"]+1)),
+    last = lambda wildcards: "%s/%s/correction/correct.%s.%d.fasta.gz" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id, tconfig[wildcards.assembler]["canu_correct_iter"])
   output:
     fq = "%s/{assembler}/correction/correct.{sample_id}.final.fasta.gz" % (__CANU_OUTDIR__)
   shell: """
-    ln -s {input.fq} {output.fq}
+    ln -s {input.last} {output.fq}
   """
 
 ###############################################################################
@@ -91,7 +92,7 @@ rule canu_trim:
   shell: """
     mkdir -p {params.output_dir}
     canu -trim \
-      -p {wildcards.sample_id}
+      -p {wildcards.sample_id} \
       -d {params.output_dir} \
       genomeSize={params.genome_size} \
       {params.params} \
