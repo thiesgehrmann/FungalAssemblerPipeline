@@ -79,9 +79,9 @@ mkdir -p "$out_dir"
 
 
 # Download the conversion tool if we need it
-if [ ! -e "$SCRIPTDIR/tools/pipelinetsv2PipelineJSON.py" ]; then
-  wget https://raw.githubusercontent.com/thiesgehrmann/bioscripts/master/pipelinetsv2pipelineJSON.py -O "$SCRIPTDIR/tools/pipelinetsv2PipelineJSON.py" &> /dev/null
-  chmod +x "$SCRIPTDIR/tools/pipelinetsv2PipelineJSON.py"
+if [ ! -e "$SCRIPTDIR/pipeline_tools/pipelinetsv2PipelineJSON.py" ]; then
+  wget https://raw.githubusercontent.com/thiesgehrmann/bioscripts/master/pipelinetsv2pipelineJSON.py -O "$SCRIPTDIR/pipeline_tools/pipelinetsv2PipelineJSON.py" &> /dev/null
+  chmod +x "$SCRIPTDIR/pipeline_tools/pipelinetsv2PipelineJSON.py"
 fi
 
 
@@ -90,7 +90,7 @@ fi
 
   # Generate config file
 verifyOverWrite $out_dir/config.json
-"$SCRIPTDIR/tools/pipelinetsv2PipelineJSON.py" $data_desc $data_dir > $out_dir/config.json
+"$SCRIPTDIR/pipeline_tools/pipelinetsv2PipelineJSON.py" $data_desc $data_dir > $out_dir/config.json
 
 ###############################################################################
 
