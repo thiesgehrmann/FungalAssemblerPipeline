@@ -6,7 +6,9 @@ import re
 
 __ASSEMBLERS__ = tconfig["assemblers"]
 
-__TOOLS_DIR__   = "%s/tools" % INSTALL_DIR
+__TOOLS_DIR__   = "%s/pipeline_tools" % INSTALL_DIR
+__COMP_DIR__    = "pipeline_components"
+
 
 __NOCASE__ = "/UNDEFINED/CASE/../NO/CURRENT/IMPLEMENTATION"
 
@@ -88,44 +90,44 @@ rule all:
 ###############################################################################
 #  MERGE ALL MEASUREMENTS INTO ONE                                            #
 ###############################################################################
-include: "merge_measurements.Snakefile"
+include: "%s/merge_measurements.Snakefile" % __COMP_DIR__
 
 ###############################################################################
 #  MERGE ONT IN SAME SAMPLE                                                   #
 ###############################################################################
 
-include: "merge_sample_onts.Snakefile"
+include: "%s/merge_sample_onts.Snakefile" % __COMP_DIR__
 
 ###############################################################################
 #  ASSEMBLERS                                                                 #
 ###############################################################################
 
-include: "template_miniasm.Snakefile"
-include: "template_canu.Snakefile"
-include: "template_spades.Snakefile"
+include: "%s/template_miniasm.Snakefile" % __COMP_DIR__
+include: "%s/template_canu.Snakefile" % __COMP_DIR__
+include: "%s/template_spades.Snakefile" % __COMP_DIR__
 
 ###############################################################################
 #  RACON                                                                      #
 ###############################################################################
 
-include: "racon.Snakefile"
+include: "%s/racon.Snakefile" % __COMP_DIR__
 
 ###############################################################################
 #  PILON                                                                      #
 ###############################################################################
 
-include: "pilon.Snakefile"
+include: "%s/pilon.Snakefile" % __COMP_DIR__
 
 ###############################################################################
 #  AUGUSTUS                                                                   #
 ###############################################################################
 
-include: "augustus.Snakefile"
+include: "%s/augustus.Snakefile" % __COMP_DIR__
 
 ###############################################################################
 #  METRICS                                                                    #
 ###############################################################################
 
-include: "busco.Snakefile"
-include: "quast.Snakefile"
-include: "metrics.Snakefile"
+include: "%s/busco.Snakefile" % __COMP_DIR__
+include: "%s/quast.Snakefile" % __COMP_DIR__
+include: "%s/metrics.Snakefile" % __COMP_DIR__

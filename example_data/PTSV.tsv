@@ -1,0 +1,7 @@
+project_id	sample_id	organism_name	sample_name	data_type	experiment_id	measurement_id	library_layout	location	r	r1	r2
+PRJEB14774	s288cr7	scere	s288cr7	OXFORD_NANOPORE	ontr7	ontr7_1d	SINGLE	./	S288C_Nanopore_R7_1D.fastq	S288C_Nanopore_R7.fastq	S288C_Nanopore_R7.fastq
+PRJEB14774	s288cr7	scere	s288cr7	OXFORD_NANOPORE	ontr7	ontr7_2d	SINGLE	./	S288C_Nanopore_R7_2D.fastq	S288C_Nanopore_R7.fastq	S288C_Nanopore_R7.fastq
+PRJEB14774	s288cr7	scere	s288cr7	ILLUMINA	illr7	illr7_01	PAIRED	./	S288C_1.fastq	S288C_illumina_1.fastq	S288C_illumina_2.fastq
+PRJEB14774	s288cr9	scere	s288cr9	OXFORD_NANOPORE	ontr9	ont49_1d	SINGLE	./	S288C_Nanopore_R9_1D.fastq	S288C_Nanopore_R9.fastq	S288C_Nanopore_R9.fastq
+PRJEB14774	s288cr9	scere	s288cr9	OXFORD_NANOPORE	ontr9	ont49_2d	SINGLE	./	S288C_Nanopore_R9_2D.fastq	S288C_Nanopore_R9.fastq	S288C_Nanopore_R9.fastq
+PRJEB14774	s288cr9	scere	s288cr9	ILLUMINA	illr9	illr9_01	PAIRED	./	S288C_1.fastq	S288C_illumina_1.fastq	S288C_illumina_2.fastq
