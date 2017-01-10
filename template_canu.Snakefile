@@ -4,6 +4,8 @@
 
 # Will be a good idea to consider these things:
 #  http://canu.readthedocs.io/en/latest/faq.html
+#
+#  SPLIT the different R9/R7 1D/2D data types for correction!!
 
 __CANU_OUTDIR__ = "%s/canu/" % WORKDIR
 

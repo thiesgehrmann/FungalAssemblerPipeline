@@ -22,11 +22,20 @@ wildcard_constraints:
 
 uniq = lambda L: list(set(L))
 iden = lambda x,y: set(x) == set(y)
+flat = lambda x: [ item for list in x for item in list ]
 
-sampleExpID_ONTS = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "OXFORD_NANOPORE")])
+sampleExpID_ONTS       = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "OXFORD_NANOPORE")])
+sampleExpID_ONTS_R7_1D = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "OXFORD_NANOPORE" and r["library_layout"] == "r71d")])
+sampleExpID_ONTS_R7_2D = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "OXFORD_NANOPORE" and r["library_layout"] == "r72d")])
+sampleExpID_ONTS_R9_1D = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "OXFORD_NANOPORE" and r["library_layout"] == "r91d")])
+sampleExpID_ONTS_R9_2D = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "OXFORD_NANOPORE" and r["library_layout"] == "r92d")])
+
+
 sampleExpID_ILLS = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "ILLUMINA" and r["library_layout"] == "SINGLE")])
 sampleExpID_ILLP = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id and r["data_type"] == "ILLUMINA" and r["library_layout"] == "PAIRED")])
 sampleExpIDs     = lambda sample_id: uniq([ r["experiment_id"] for r in config["data"] if (r["sample_id"] == sample_id) ])
+
+expIDs = [ item for list in config["data"] for item in list ]
 
 expDataType      = lambda exp_id: [ "%s,%s" % (r["data_type"], r["library_layout"]) for r in config["data"] if r["experiment_id"] == exp_id][0]
 sampleDataTypes  = lambda sample_id: uniq([ "%s,%s" % (r["data_type"], r["library_layout"]) for r in config["data"] if r["sample_id"] == sample_id])
@@ -44,6 +53,8 @@ __SHELL_FUNCTIONS__ = "%s/shell_functions.sh" % __TOOLS_DIR__
 ###############################################################################
 
 __LOGS_OUTDIR__ = "%s/logs"% WORKDIR
+
+FASTQC_OUTDIR = "%s/fastqc" % WORKDIR
 
 MERGE_MEASUREMENTS_OUTDIR = "%s/merge_measurements" % WORKDIR
 

@@ -12,7 +12,7 @@ defaultparams = {
 
   #Canu
   "template"   : "canu",
-  "canu_genomesize" : "4.8m",
+  "canu_genomesize" : "12.2m",
   "canu_maxmem"     : "20G",
   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false",
   "canu_correct_iter"   : 1,
@@ -93,41 +93,51 @@ addParams("miniasm_nopolish",
 #Canu parameters
 addParams("canu_full",
   {"template"   : "canu",
-   "canu_genomesize" : "4.8m",
+   "canu_genomesize" : "12.2m",
    "canu_maxmem"     : "20G",
-   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false"})
+   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false stopOnReadQuality=false"})
 
 addParams("canu_noracon",
   {"template"   : "canu",
-   "canu_genomesize" : "4.8m",
+   "canu_genomesize" : "12.2m",
    "canu_maxmem"     : "20G",
-   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false",
+   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false stopOnReadQuality=false",
    "racon_do"        : False})
 
 addParams("canu_nopilon",
   {"template"   : "canu",
-   "canu_genomesize" : "4.8m",
+   "canu_genomesize" : "12.2m",
    "canu_maxmem"     : "20G",
-   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false",
+   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false stopOnReadQuality=false",
    "pilon_do"        : False})
 
 addParams("canu_nopolish",
   {"template"   : "canu",
-   "canu_genomesize" : "4.8m",
+   "canu_genomesize" : "12.2m",
    "canu_maxmem"     : "20G",
-   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false",
+   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false stopOnReadQuality=false",
    "racon_do"        : False,
    "pilon_do"        : False})
 
 addParams("canu_r71d",
   {"template"   : "canu",
-   "canu_genomesize" : "4.8m",
+   "canu_genomesize" : "12.2m",
    "canu_maxmem"     : "20G",
-   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false",
-   "canu_correct_iter"   : 2,
+   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false stopOnReadQuality=false",
+   "canu_correct_iter"   : 5,
    "canu_correct_params" : "corOutCoverage=500 corMinCoverage=0 corMhapSensitivity=high",
    "canu_trim_params"    : "",
    "canu_assemble_params": "errorRate=0.1 utgGraphDeviation=50"})
+
+addParams("canu_r79mixed_d",
+  {"template"   : "canu",
+   "canu_genomesize" : "12.2m",
+   "canu_maxmem"     : "20G",
+   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false errorRate=0.025 stopOnReadQuality=false",
+   "canu_correct_iter"   : 1,
+   "canu_correct_params" : "corMinCoverage=0 errorRate=0.035",
+   "canu_trim_params"    : "",
+   "canu_assemble_params": ""})
 
 addParams("spades_full",
   {"template" : "spades",
