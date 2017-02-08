@@ -6,7 +6,7 @@ __SPADES_OUTDIR__ = "%s/spades" % WORKDIR
 
 rule spades:
   input:
-    ont_fq  = lambda wildcards: "%s/ont_single.%s.fq" % (MERGE_SAMPLE_ONTS_OUTDIR, wildcards.sample_id) if len(sampleExpID_ILLS(wildcards.sample_id)+sampleExpID_ILLP(wildcards.sample_id)) > 0 else __NO_CASE__,
+    ont_fq  = lambda wildcards: "%s/ont_single.%s.fq" % (MERGE_SAMPLE_ONTS_OUTDIR, wildcards.sample_id) if len(sampleExpID_ILLS(wildcards.sample_id)+sampleExpID_ILLP(wildcards.sample_id)) > 0 else __NOCASE__,
     r       = lambda wildcards: expand("%s/illumina_single.{exp}.fq" % (MERGE_MEASUREMENTS_OUTDIR), exp=sampleExpID_ILLS(wildcards.sample_id)),
     r1      = lambda wildcards: expand("%s/illumina_paired.{exp}_1.fq" % (MERGE_MEASUREMENTS_OUTDIR), exp=sampleExpID_ILLP(wildcards.sample_id)),
     r2      = lambda wildcards: expand("%s/illumina_paired.{exp}_2.fq" % (MERGE_MEASUREMENTS_OUTDIR), exp=sampleExpID_ILLP(wildcards.sample_id))

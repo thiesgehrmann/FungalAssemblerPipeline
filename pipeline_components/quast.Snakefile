@@ -1,6 +1,6 @@
 rule quast_skip:
   input:
-    asm = lambda wildcards: __NO_CASE__ if tconfig[wildcards.assembler]["busco_do"] else "%s/pilon.%s.%s.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id)
+    asm = lambda wildcards: __NOCASE__ if tconfig[wildcards.assembler]["busco_do"] else "%s/pilon.%s.%s.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id)
   output:
     rep = "%s/quast.{assembler}.{sample_id}.tsv" % QUAST_OUTDIR
   shell: """
@@ -11,7 +11,7 @@ rule quast_skip:
 
 rule quast:
   input: 
-    asm = lambda wildcards: "%s/pilon.%s.%s.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id) if tconfig[wildcards.assembler]["quast_do"] else __NO_CASE__
+    asm = lambda wildcards: "%s/pilon.%s.%s.fa" % (PILON_OUTDIR, wildcards.assembler, wildcards.sample_id) if tconfig[wildcards.assembler]["quast_do"] else __NOCASE__
   output:
     rep = "%s/quast.{assembler}.{sample_id}.tsv" % QUAST_OUTDIR
   params:

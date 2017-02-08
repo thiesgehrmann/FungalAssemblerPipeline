@@ -60,8 +60,8 @@ addParams("my_first_assembler", params)
 
 ### Adding assembler templates
 You can add assembler templates.
-Look at the (pipeline_components/template_template.Snakefile) for a template on how to do this.
-Also look at (pipeline_components/template_miniasm.Snakefile) to see how it is done.
+Look at the [pipeline_components/template_template.Snakefile](pipeline_components/template_template.Snakefile) for a template on how to do this.
+Also look at [pipeline_components/template_miniasm.Snakefile](pipeline_components/template_miniasm.Snakefile) to see how it is done.
 
 The resulting Snakefile must then be included in (pipeline.Snakefile).
 

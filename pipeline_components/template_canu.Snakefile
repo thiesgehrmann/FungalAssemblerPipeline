@@ -35,6 +35,7 @@ rule canu_correct_begin:
     corr_params = lambda wildcards: tconfig[wildcards.assembler]["canu_correct_params"],
     maxmem      = lambda wildcards: tconfig[wildcards.assembler]["canu_maxmem"],
     output_dir  = lambda wildcards: "%s/%s/correction/correct.%s.1/" % (__CANU_OUTDIR__, wildcards.assembler, wildcards.sample_id)
+  threads: 4
   shell: """
     mkdir -p {params.output_dir}
     canu -correct \

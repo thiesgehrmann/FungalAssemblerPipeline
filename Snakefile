@@ -119,15 +119,15 @@ addParams("canu_nopolish",
    "racon_do"        : False,
    "pilon_do"        : False})
 
-addParams("canu_r71d",
-  {"template"   : "canu",
-   "canu_genomesize" : "12.2m",
-   "canu_maxmem"     : "20G",
-   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false stopOnReadQuality=false",
-   "canu_correct_iter"   : 5,
-   "canu_correct_params" : "corOutCoverage=500 corMinCoverage=0 corMhapSensitivity=high",
-   "canu_trim_params"    : "",
-   "canu_assemble_params": "errorRate=0.1 utgGraphDeviation=50"})
+#addParams("canu_r71d",
+#  {"template"   : "canu",
+#   "canu_genomesize" : "12.2m",
+#   "canu_maxmem"     : "20G",
+#   "canu_params"     : "corMaxEvidenceErate=0.15 useGrid=false stopOnReadQuality=false",
+#   "canu_correct_iter"   : 5,
+#   "canu_correct_params" : "corOutCoverage=500 corMinCoverage=0 corMhapSensitivity=high",
+#   "canu_trim_params"    : "",
+#   "canu_assemble_params": "errorRate=0.1 utgGraphDeviation=50"})
 
 addParams("canu_r79mixed_d",
   {"template"   : "canu",
@@ -139,25 +139,25 @@ addParams("canu_r79mixed_d",
    "canu_trim_params"    : "",
    "canu_assemble_params": ""})
 
-addParams("spades_full",
-  {"template" : "spades",
-   "quast_scaffolds" : True})
+#addParams("spades_full",
+#  {"template" : "spades",
+#   "quast_scaffolds" : True})
 
-addParams("spades_noracon",
-  {"template" : "spades",
-   "racon_do" : False,
-   "quast_scaffolds" : True})
+#addParams("spades_noracon",
+#  {"template" : "spades",
+#   "racon_do" : False,
+#   "quast_scaffolds" : True})
 
-addParams("spades_nopilon",
-  {"template" : "spades",
-   "pilon_do" : False,
-   "quast_scaffolds" : True})
+#addParams("spades_nopilon",
+#  {"template" : "spades",
+#   "pilon_do" : False,
+#   "quast_scaffolds" : True})
 
-addParams("spades_nopolish",
-  {"template" : "spades",
-   "racon_do" : False,
-   "pilon_do" : False,
-   "quast_scaffolds" : True})
+#addParams("spades_nopolish",
+#  {"template" : "spades",
+#   "racon_do" : False,
+#   "pilon_do" : False,
+#   "quast_scaffolds" : True})
 
 ###############################################################################
 ###############################################################################
